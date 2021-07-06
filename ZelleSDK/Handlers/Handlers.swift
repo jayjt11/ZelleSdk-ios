@@ -19,7 +19,7 @@ func configureHandlers(for bridgeView: BridgeView) -> WKWebViewConfiguration {
     config.userContentController.add(qrCodeHandler, name: "scanQRCode")
     config.userContentController.add(qrCodeHandler, name: "selectQRCodeFromPhotos")
 
-    let photosHandler = PhotosHandler(bridgeView: bridgeView)
+    let photosHandler = PhotosHandler(bridgeView: bridgeView, viewController: bridgeView.viewController)
     config.userContentController.add(photosHandler, name: "takePhoto")
     config.userContentController.add(photosHandler, name: "selectFromPhotos")
 

@@ -13,6 +13,8 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     var bridgeView: BridgeView
     var viewController: UIViewController?
     var counter : Int = 0
+    private let cacheValidityPeriod = 86400.0 //one day
+
     init(bridgeView: BridgeView, viewController: UIViewController?) {
         self.bridgeView = bridgeView
         self.viewController = viewController
@@ -28,15 +30,107 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     }
     
     func getContacts() {
-        
-//        requestAccess { (true) in
-//
-//            self.fetchAllContacts()
+        //check TS of last caching
+        print("######### Getting from local cache")
+//        if let lastCacheTS = UserDefaults.standard.object(forKey: "cachedContactsTS") as? Date {
+//            let timeInterval = Date().timeIntervalSince(lastCacheTS)
+//            if (Date().timeIntervalSince(lastCacheTS) < cacheValidityPeriod) {
+//                if let cachedContacts = UserDefaults.standard.array(forKey: "cachedContacts") {
+//                    self.bridgeView.evaluate(JS: "var cachedContacts = \(cachedContacts);") { print($0, $1) }
+//                    self.bridgeView.evaluate(JS: "callbackContacts({cached: true})") { print($0, $1) }
+//                    return
+//                }
+//            }
 //        }
         
-        self.bridgeView.evaluate(JS: "callbackContacts({contacts :' \("All contacts feature is in progress, Available Soon")'})")
-                        
+        //else, read local contacts
+        print("######### Getting from contact list")
+        let store = CNContactStore()
+        do {
+            let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
+            let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
+            var count = 0
+            self.bridgeView.evaluate(JS: "var cachedContacts = [];")
+            try store.enumerateContacts(with: fetchRequest) { (contact, _) in
+                count += 1
+                
+                var firstName = contact.givenName
+                var lastName = contact.familyName
+                var name = firstName + " " + lastName
+                
+                if (!name.isEmpty) {
+                    var queue = ""
+                    let contactPhoneNumbers = contact.phoneNumbers.map {
+                        $0.value.stringValue }
+                    
+                    let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
+                    
+                    var errorObject = ErrorObject(id: "", msg: "")
+                    
+                    var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses, photo: "null", error: errorObject)
+                    
+                    let jsonEncoder = JSONEncoder()
+                    let jsonData = try! jsonEncoder.encode(contact)
+                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                    
+                    queue = json!
+                    
+//                    queue += """
+//                        cachedContacts.push(\(json!));
+//                    """
+                    
+//                    for number in contact.phoneNumbers {
+//                        //do something with the phone numbers
+//                        queue += """
+//                            cachedContacts.push(
+//                                {
+//                                    firstName: "\(contact.givenName)",
+//                                    lastName: "\(contact.familyName)",
+//                                    tokenType: "phone",
+//                                    tokenValue: "\(number.value.stringValue)",
+//                                }
+//                            );
+//                        """
+//                    }
+//
+//                    for email in contact.emailAddresses {
+//                        queue += """
+//                            cachedContacts.push(
+//                                {
+//                                    firstName: "\(contact.givenName)",
+//                                    lastName: "\(contact.familyName)",
+//                                    tokenType: "email",
+//                                    tokenValue: "\(email.value)",
+//                                }
+//                            );
+//                        """
+//                    }
+                    
+                    print("Queue \(queue)")
+                    self.bridgeView.evaluate(JS: queue)
+                }
+                
+                //save TS of last caching
+                UserDefaults.standard.set(Date(), forKey: "cachedContactsTS")
+            }
+            
+            self.bridgeView.evaluate(JS: "callbackContacts({cached: true})")
+        } catch {
+            print("Failed to fetch contact, error: \(error)")
+        }
     }
+    
+//    func getContacts() {
+//
+////        requestAccess { (true) in
+////
+////            self.fetchAllContacts()
+////        }
+//
+//        self.bridgeView.evaluate(JS: "callbackContacts({contacts :' \("All contacts feature is in progress, Available Soon")'})")
+//
+//    }
+    
     func requestAccess(completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .authorized:
@@ -129,6 +223,7 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
 //                    let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
 //                    var count = 0
 //                    try store.enumerateContacts(with: fetchRequest) { (contact, _) in
+        
 //                        count += 1
 //                        for number in contact.phoneNumbers {
 //                            //do something with the phone numbers
@@ -169,7 +264,11 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
         
         let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
         
-        var contact = Contact(name: name, phoneNumber: contactPhoneNumbers, emailAddress: contactEmailAddresses)
+//        var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses)
+        
+        var errorObject = ErrorObject(id: "", msg: "")
+        
+        var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses, photo: "null", error: errorObject)
         
         
         let jsonEncoder = JSONEncoder()

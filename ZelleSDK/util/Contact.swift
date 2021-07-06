@@ -11,13 +11,16 @@ import UIKit
 struct Contact : Codable {
     
     var name : String
-    var phoneNumber : [String]
-    var emailAddress : [String]
+    var phone : [String]
+    var email : [String]
+    var photo : String
+    var error : ErrorObject
     
-    init(name : String, phoneNumber : [String], emailAddress : [String]) {
+    init(name : String, phone : [String], email : [String], photo : String, error : ErrorObject) {
         self.name = name
-        self.phoneNumber = phoneNumber
-        self.emailAddress = emailAddress
-        
+        self.phone = phone
+        self.email = email
+        self.photo = photo
+        self.error = error
     }
 }

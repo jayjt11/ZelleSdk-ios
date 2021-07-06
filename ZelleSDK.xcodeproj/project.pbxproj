@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69407C7826934FD300F45CC7 /* ContactsHandler1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C7726934FD300F45CC7 /* ContactsHandler1.swift */; };
+		69407C7A2693502400F45CC7 /* ErrorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C792693502400F45CC7 /* ErrorObject.swift */; };
+		69407C7E2693604A00F45CC7 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C7D2693604A00F45CC7 /* Util.swift */; };
 		695F34C32689BC46004A8C47 /* ZelleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 695F34C12689BC46004A8C47 /* ZelleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		695F34D62689BCE6004A8C47 /* PopupHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695F34CE2689BCE6004A8C47 /* PopupHandler.swift */; };
 		695F34D72689BCE6004A8C47 /* Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695F34CF2689BCE6004A8C47 /* Handlers.swift */; };
@@ -27,6 +30,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69407C7726934FD300F45CC7 /* ContactsHandler1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler1.swift; sourceTree = "<group>"; };
+		69407C792693502400F45CC7 /* ErrorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorObject.swift; sourceTree = "<group>"; };
+		69407C7D2693604A00F45CC7 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		695F34BE2689BC45004A8C47 /* ZelleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZelleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		695F34C12689BC46004A8C47 /* ZelleSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZelleSDK.h; sourceTree = "<group>"; };
 		695F34C22689BC46004A8C47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				695F34D52689BCE6004A8C47 /* ContactsHandler.swift */,
+				69407C7726934FD300F45CC7 /* ContactsHandler1.swift */,
 				695F34CF2689BCE6004A8C47 /* Handlers.swift */,
 				695F34D42689BCE6004A8C47 /* LocationHandler.swift */,
 				695F34D22689BCE6004A8C47 /* PermissionsHandler.swift */,
@@ -143,6 +150,8 @@
 			isa = PBXGroup;
 			children = (
 				695F3559268DCF4F004A8C47 /* Contact.swift */,
+				69407C792693502400F45CC7 /* ErrorObject.swift */,
+				69407C7D2693604A00F45CC7 /* Util.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -234,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				695F34D82689BCE6004A8C47 /* QRCodeHandler.swift in Sources */,
+				69407C7E2693604A00F45CC7 /* Util.swift in Sources */,
 				695F34DA2689BCE6004A8C47 /* PermissionsHandler.swift in Sources */,
 				695F34E92689BD31004A8C47 /* Bridge.swift in Sources */,
 				695F34E82689BD31004A8C47 /* BridgeController.swift in Sources */,
@@ -248,6 +258,8 @@
 				695F355A268DCF4F004A8C47 /* Contact.swift in Sources */,
 				695F34E12689BD03004A8C47 /* Zelle.swift in Sources */,
 				695F34DB2689BCE6004A8C47 /* PhotosHandler.swift in Sources */,
+				69407C7A2693502400F45CC7 /* ErrorObject.swift in Sources */,
+				69407C7826934FD300F45CC7 /* ContactsHandler1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
