@@ -67,7 +67,7 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                     
                     var errorObject = ErrorObject(id: "", msg: "")
                     
-                    var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses, photo: "null", error: errorObject)
+                    let contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses, photo: "null", error: errorObject)
                     
                     let jsonEncoder = JSONEncoder()
                     let jsonData = try! jsonEncoder.encode(contact)
@@ -108,6 +108,7 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                     
                     print("Queue \(queue)")
                     self.bridgeView.evaluate(JS: queue)
+                   // self.bridgeView.evaluate(JS: "cachedData(\(queue))")
                 }
                 
                 //save TS of last caching
@@ -252,49 +253,96 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
 //        viewController?.dismiss(animated: true, completion: nil)
 //    }
     
+    func validateName(name: String) -> Bool {
+        
+        if name != "" && name.count>=2 && name.count<=30 {
+            return true
+        }
+        else {
+           return false
+        }
+        
+    }
+    
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
 
         var firstName = contact.givenName
         var lastName = contact.familyName
         var name = firstName + " " + lastName
+        name = name.trimmingLeadingAndTrailingSpaces()
         
-        let contactPhoneNumbers = contact.phoneNumbers.map {
-            $0.value.stringValue }
+        print("Name \(name)")
         
-        let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
+        if validateName(name: name) {
+            
+            let contactPhoneNumbers = contact.phoneNumbers.map {
+                        $0.value.stringValue }
+                    
+                    var phoneNumbers = contactPhoneNumbers.uniqued()
+            
+                    for myNumber in phoneNumbers {
+                        print("My Number \(myNumber)")
+                    }
+            
+                    var arrayphoneNumbers = [String]()
+            
+                    for number in phoneNumbers {
+                        
+                        if number.isValidPhoneNumber() {
+                            arrayphoneNumbers.append(number)
+                        }
+                    }
+                    let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
+            
+                    var emailAddress = contactEmailAddresses.uniqued()
+                    for myEmail in emailAddress {
+                        print("My myEmail \(myEmail)")
+                    }
+                    
+                    var arrayEmailAddress = [String]()
+                    for email in emailAddress {
+                        if email.isValidEmail() {
+                            arrayEmailAddress.append(email)
+                        }
+                    }
+            //        var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses)
+                    
+                    var errorObject = ErrorObject(id: "", msg: "")
+                    
+                    var contact = Contact(name: name, phone: arrayphoneNumbers, email: arrayEmailAddress, photo: "null", error: errorObject)
+                    
+                    
+                    let jsonEncoder = JSONEncoder()
+                    let jsonData = try! jsonEncoder.encode(contact)
+                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                    
+                    print("My JSON Object \(json!)")
+                    
+            //        for num in contactPhoneNumbers {
+            //            print("My Contact \(num)")
+            //        }
+            //
+            //        for email in contactEmailAddress {
+            //            print("My Email \(email)")
+            //        }
+            //        contact.phoneNumbers.map {  phoneNumber.append($0.value.stringValue)
+            //        }
+            //
+            //        for mycontact in phoneNumber {
+            //
+            //            print("My Contact \(mycontact)")
+            //        }
+                    
+                    viewController?.dismiss(animated: true, completion: nil)
+                    self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: json!))'})")
+                    print("Contact Selected")
+            
+        } else {
+            print("invalid name")
+        }
         
-//        var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses)
         
-        var errorObject = ErrorObject(id: "", msg: "")
-        
-        var contact = Contact(name: name, phone: contactPhoneNumbers, email: contactEmailAddresses, photo: "null", error: errorObject)
-        
-        
-        let jsonEncoder = JSONEncoder()
-        let jsonData = try! jsonEncoder.encode(contact)
-        let json = String(data: jsonData, encoding: String.Encoding.utf8)
-        
-        print("My JSON Object \(json!)")
-        
-//        for num in contactPhoneNumbers {
-//            print("My Contact \(num)")
-//        }
-//
-//        for email in contactEmailAddress {
-//            print("My Email \(email)")
-//        }
-//        contact.phoneNumbers.map {  phoneNumber.append($0.value.stringValue)
-//        }
-//
-//        for mycontact in phoneNumber {
-//
-//            print("My Contact \(mycontact)")
-//        }
-        
-        viewController?.dismiss(animated: true, completion: nil)
-        self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: json!))'})")
-        print("Contact Selected")
 
     }
     
