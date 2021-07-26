@@ -23,13 +23,16 @@ func configureHandlers(for bridgeView: BridgeView) -> WKWebViewConfiguration {
     config.userContentController.add(photosHandler, name: "takePhoto")
     config.userContentController.add(photosHandler, name: "selectFromPhotos")
 
-    let shareHandler = ShareHandler(bridgeView: bridgeView)
+    let shareHandler = ShareHandler(bridgeView: bridgeView, viewController: bridgeView.viewController)
     config.userContentController.add(shareHandler, name: "sharePhoto")
     config.userContentController.add(shareHandler, name: "shareText")
-
+    
+    let sessionHandler = SessionHandler(bridgeView: bridgeView, viewController: bridgeView.viewController)
+    config.userContentController.add(sessionHandler, name: "sessionTimeout")
+    
     let locationHandler = LocationHandler(bridgeView: bridgeView)
     config.userContentController.add(locationHandler, name: "getLocation")
-
+    
     let permissionsHandler = PermissionsHandler(bridgeView: bridgeView)
     config.userContentController.add(permissionsHandler, name: "checkPermissions")
 

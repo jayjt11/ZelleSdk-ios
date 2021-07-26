@@ -7,8 +7,9 @@
 
 import Foundation
 import WebKit
+import CoreLocation
 
-class LocationHandler: NSObject, WKScriptMessageHandler {
+class LocationHandler: NSObject, WKScriptMessageHandler,CLLocationManagerDelegate {
     var bridgeView: BridgeView
     init(bridgeView: BridgeView) {
         self.bridgeView = bridgeView
@@ -24,8 +25,24 @@ class LocationHandler: NSObject, WKScriptMessageHandler {
 
     func getLocation() {
         
-
-        self.bridgeView.evaluate(JS: "callbackLocation({location: '\("Location feature is in progress, Available Soon")'})")
+     let locationManager = CLLocationManager()
+        var userLatitude:CLLocationDegrees! = 0
+        var userLongitude:CLLocationDegrees! = 0
         
+        if CLLocationManager.locationServicesEnabled() {
+            UserDefaults.standard.set(true, forKey: "location")
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startMonitoringSignificantLocationChanges()
+
+            userLatitude  = locationManager.location?.coordinate.latitude
+            userLongitude  = locationManager.location?.coordinate.longitude
+            
+            self.bridgeView.evaluate(JS: "callbackLocation({location: '\("Currentlocation userLatitude is \(userLatitude!)")and userLongitude is \(userLongitude!)'})")
+        } else {
+            
+            UserDefaults.standard.set(false, forKey: "location")
+        }
+       
     }
 }

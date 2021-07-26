@@ -10,14 +10,39 @@ import QRCodeReader
 import Photos
 
 // , QRCodeReaderViewControllerDelegate protocol
+
+/*
+  * Qrcode Handle created to handle get data from Qrcode.
+  * this viewcontroller wil called from Javascript.
+  * scanCode() function used to scan qr from Camera.
+  * Select Qrcode from Photos.
+  * selectQRCodeFromPhotos() function used to read qrcode from Image picked from gallery/External Storage.
+ 
+ */
+
 class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDelegate,UIImagePickerControllerDelegate, QRCodeReaderViewControllerDelegate  {
+     var counter : Int = 0
 
     var bridgeView: BridgeView
     var viewController: UIViewController?
+    
+    
+    /*
+            
+     * Bridgeview configuration with view and View controller.
+             
+    */
+    
     init(bridgeView: BridgeView, viewController: UIViewController?) {
         self.bridgeView = bridgeView
         self.viewController = viewController
     }
+    
+    /*
+     
+      * QRCodeHandler  class has been implemented here to perform their actions.
+
+     */
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -28,9 +53,14 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         }
     }
     
+/*
+    * Open Qr function will intiate the Avkit framework choose csan the qr code.
+     
+*/
+    
     func scanCode() {
         
-       self.bridgeView.evaluate(JS: "callbackQRCode({qrCode: 'scanning ...'})")
+    //   self.bridgeView.evaluate(JS: "callbackQRCode({code: 'scanning ...'})")
 
         let builder = QRCodeReaderViewControllerBuilder {
             $0.reader = QRCodeReader(metadataObjectTypes: [.qr], captureDevicePosition: .back)
@@ -44,47 +74,107 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         let reader = QRCodeReaderViewController(builder: builder)
         reader.delegate = self
         viewController?.present(reader, animated: true, completion: nil)
- 
-        // default methods
-        
-//        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("QR code feature is in progress, Available Soon")'})")
-        
+        UserDefaults.standard.set(true, forKey: "camera")
     }
     
-   // Qr code callback methods
+    /*
+     * Qr code callback methods
+     * Here the result will be sent to Javacript.
+     
+     */
+   
     
     func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
-        self.bridgeView.evaluate(JS: "callbackQRCode({qrCode: '\(result.value)'})")
         reader.stopScanning()
         reader.dismiss(animated: true, completion: nil)
+        viewController?.dismiss(animated: true, completion: nil)
+        
+        var code = result.value
+        if code != ""  {
+                    
+                    let jsonData = code.data(using: .utf8)!
+                    let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
+                    
+        //            if qrCode.phone != nil && qrCode.email != nil {
+        //
+        //                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+        //            }
+                    
+                    if (qrCode.phone != nil) && (qrCode.email != nil) {
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+                        
+                    } else if qrCode.phone == nil {
+                        
+                        if validateName(name: qrCode.name) {
+                            
+                            if qrCode.email!.isValidEmail() {
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Email: \(qrCode.email!) '})")
+                            } else {
+                               
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                            }
+                            
+                        } else {
+                            
+                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Name")'})")
+                        }
+                    }
+                    else if qrCode.email == nil {
+                        
+                        if validateName(name: qrCode.name) {
+                            
+                            if qrCode.phone!.isValidPhoneNumber() {
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Phone: \(qrCode.phone!) '})")
+                            } else {
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Phone")'})")
+                            }
+                        } else {
+                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                        }
+                        
+                    }
+                }
+                else {
+                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+                }
     }
+    
+   
 
     func readerDidCancel(_ reader: QRCodeReaderViewController) {
-        self.bridgeView.evaluate(JS: "callbackQRCode({qrCode: 'no code!', error: 'canceled'})")
         reader.stopScanning()
         reader.dismiss(animated: true, completion: nil)
+        viewController?.dismiss(animated: true, completion: nil)
+        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("User Cancelled the permission")'})")
     }
+    
+    /*
+     
+     * Here selectQRCodeFromPhotos() function will Intiate the Phpoto Library,to Select the qr code image from Gallery.
+     */
     
     func selectQRCodeFromPhotos() {
 
         DispatchQueue.main.async {
          PHPhotoLibrary.requestAuthorization({status in
-             if status == .authorized{
+             if status == .authorized {
                 DispatchQueue.main.async {
-                     self.Gallery()
+                    UserDefaults.standard.set(true, forKey: "photos")
+                    self.Gallery()
                 }
              } else {
                 DispatchQueue.main.async {
-                    self.showSettingsAlerts { (Bool) in
+                UserDefaults.standard.set(false, forKey: "photos")
+                if self.counter > 0 {
+                self.showSettingsAlerts { (Bool) in }
                 }
+                self.counter += 1
                 }
-          }
+            }
          })
         }
-        
-        //Default Callback
-//        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("QR code feature is in progress, Available Soon")'})")
     }
+    
     
     func Gallery() {
         
@@ -106,6 +196,18 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         }
     }
     
+    func validateName(name: String) -> Bool {
+        
+        if name != "" && name.count>=2 && ((name.count<=30) || (name.count<=255)) {
+            return true
+        }
+        else {
+           return false
+        }
+        
+    }
+
+    
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -121,17 +223,66 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         let code = features.reduce("") { $0 + ($1.messageString ?? "") }
         
         if code != ""  {
-            print(code)//Your result from QR Code
+            
+            let jsonData = code.data(using: .utf8)!
+            let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
+            
+//            if qrCode.phone != nil && qrCode.email != nil {
+//
+//                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+//            }
+            
+            if (qrCode.phone != nil) && (qrCode.email != nil) {
+                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+                
+            } else if qrCode.phone == nil {
+                
+                if validateName(name: qrCode.name) {
+                    
+                    if qrCode.email!.isValidEmail() {
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Email: \(qrCode.email!) '})")
+                    } else {
                        
-            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(code)'})")
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                    }
+                    
+                } else {
+                    
+                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Name")'})")
+                }
+            }
+            else if qrCode.email == nil {
+                
+                if validateName(name: qrCode.name) {
+                    
+                    if qrCode.phone!.isValidPhoneNumber() {
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Phone: \(qrCode.phone!) '})")
+                    } else {
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Phone")'})")
+                    }
+                } else {
+                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                }
+                
+            }
         }
         else {
             self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
         }
     }
     
+    /*
+     
+     * Here we are checking threeshold count and show the alertview to Navigate the zsettings page.
+     */
+    
+    
+    
+    
     func showSettingsAlerts(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
-         let alert = UIAlertController(title: nil, message: "This app requires access to Gallery  to proceed. Go to Settings to grant access.", preferredStyle: .alert)
+        
+        var title = UserDefaults.standard.string(forKey: "title")
+         let alert = UIAlertController(title: title, message: "This app requires access to Gallery  to proceed. Go to Settings to grant access.", preferredStyle: .alert)
          if
              let settings = URL(string: UIApplication.openSettingsURLString),
              UIApplication.shared.canOpenURL(settings) {

@@ -10,10 +10,12 @@ import QRCodeReader
 
 class PopupHandler: NSObject, WKScriptMessageHandler {
 
+    
     var bridgePopup: BridgePopup
     init(bridgePopup: BridgePopup) {
         self.bridgePopup = bridgePopup
     }
+    
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -23,6 +25,7 @@ class PopupHandler: NSObject, WKScriptMessageHandler {
             return
         }
     }
+    
     
     func dismissPopup() {
         bridgePopup.removeFromSuperview()

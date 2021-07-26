@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class Util {
     
@@ -32,10 +33,32 @@ extension String {
 extension String {
 
     func isValidPhoneNumber() -> Bool {
-        let phoneNumberRegex = "/^(?!0|1|000|800|844|855|866|877|888)\\d{10}$/"
-        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneNumberRegex)
-        let isValidPhone = phoneTest.evaluate(with: self)
-        return isValidPhone
+
+        let number = self
+        let digit = number.filter { ("0"..."9").contains($0) }
+        let pattern = try! NSRegularExpression(pattern: "[0-9\\.\\-\\+\\,\\(\\)\\ ]+", options: .caseInsensitive)
+        if ((pattern.firstMatch(in: number, options: [], range: NSRange(location: 0, length: count)) != nil) == false) {
+            return false
+        }
+        else if (digit.count == 11 && digit.hasPrefix("1")) {
+
+            let number1 = digit
+            let number2 = String(number1.dropFirst())
+            let phoneNumberRegex = "^(?!0|1|000|800|844|855|866|877|888)\\d{10}$"
+            let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneNumberRegex)
+            let isValidPhone = phoneTest.evaluate(with: number2)
+            return isValidPhone
+            
+        } else if (digit.count == 10) {
+            let number1 = digit
+            let phoneNumberRegex = "^(?!0|1|000|800|844|855|866|877|888)\\d{10}$"
+            let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneNumberRegex)
+            let isValidPhone = phoneTest.evaluate(with: number1)
+            return isValidPhone
+        }
+        else {
+           return false
+        }
     }
 }
 

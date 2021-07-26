@@ -14,13 +14,15 @@ public class Zelle: BridgeConfig {
     public init(
         institutionId: String,
         ssoKey: String,
+        title : String,
         parameters: [String:String]
-    ) {        
+    ) {
+        UserDefaults.standard.set(title, forKey: "title")
         url = "https://jayjt11.github.io/Sdk/index.html"
         url += "?institutionId=\(institutionId)&key=\(ssoKey)"
-        
         for param in parameters {
             url += "&\(param.key)=\(param.value)"
+            
         }
     }
 }
