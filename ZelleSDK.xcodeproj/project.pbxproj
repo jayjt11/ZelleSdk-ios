@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		692FE74526AAC80C00E5519D /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692FE74426AAC80B00E5519D /* Permission.swift */; };
-		69407C7826934FD300F45CC7 /* ContactsHandler1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C7726934FD300F45CC7 /* ContactsHandler1.swift */; };
 		69407C7A2693502400F45CC7 /* ErrorObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C792693502400F45CC7 /* ErrorObject.swift */; };
 		69407C7E2693604A00F45CC7 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69407C7D2693604A00F45CC7 /* Util.swift */; };
 		695F34C32689BC46004A8C47 /* ZelleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 695F34C12689BC46004A8C47 /* ZelleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,11 +30,11 @@
 		69974F7B2696D3CE003B0459 /* Contact1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F7A2696D3CE003B0459 /* Contact1.swift */; };
 		69974F7D2696E2F0003B0459 /* SessionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F7C2696E2F0003B0459 /* SessionHandler.swift */; };
 		69974F8726972B8D003B0459 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F8626972B8D003B0459 /* QRCode.swift */; };
+		69AE5EE326B15B12008AB09E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE226B15B12008AB09E /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		692FE74426AAC80B00E5519D /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
-		69407C7726934FD300F45CC7 /* ContactsHandler1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler1.swift; sourceTree = "<group>"; };
 		69407C792693502400F45CC7 /* ErrorObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorObject.swift; sourceTree = "<group>"; };
 		69407C7D2693604A00F45CC7 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		695F34BE2689BC45004A8C47 /* ZelleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZelleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +58,7 @@
 		69974F7A2696D3CE003B0459 /* Contact1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact1.swift; sourceTree = "<group>"; };
 		69974F7C2696E2F0003B0459 /* SessionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHandler.swift; sourceTree = "<group>"; };
 		69974F8626972B8D003B0459 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
+		69AE5EE226B15B12008AB09E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				695F34D52689BCE6004A8C47 /* ContactsHandler.swift */,
-				69407C7726934FD300F45CC7 /* ContactsHandler1.swift */,
 				695F34CF2689BCE6004A8C47 /* Handlers.swift */,
 				695F34D42689BCE6004A8C47 /* LocationHandler.swift */,
 				695F34D22689BCE6004A8C47 /* PermissionsHandler.swift */,
@@ -164,6 +163,7 @@
 				69974F7A2696D3CE003B0459 /* Contact1.swift */,
 				69974F8626972B8D003B0459 /* QRCode.swift */,
 				692FE74426AAC80B00E5519D /* Permission.swift */,
+				69AE5EE226B15B12008AB09E /* Constants.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -255,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				695F34D82689BCE6004A8C47 /* QRCodeHandler.swift in Sources */,
+				69AE5EE326B15B12008AB09E /* Constants.swift in Sources */,
 				69407C7E2693604A00F45CC7 /* Util.swift in Sources */,
 				695F34DA2689BCE6004A8C47 /* PermissionsHandler.swift in Sources */,
 				695F34E92689BD31004A8C47 /* Bridge.swift in Sources */,
@@ -275,7 +276,6 @@
 				695F34E12689BD03004A8C47 /* Zelle.swift in Sources */,
 				695F34DB2689BCE6004A8C47 /* PhotosHandler.swift in Sources */,
 				69407C7A2693502400F45CC7 /* ErrorObject.swift in Sources */,
-				69407C7826934FD300F45CC7 /* ContactsHandler1.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,12 +10,9 @@ import WebKit
 import Photos
 
 /*
- * PhotosHandler Handle created to handle the Photos.
- * this viewcontroller wil called from Javascript.
- * takePhoto() function used to take a photo  from Camera.
-
- * selectFromPhotos() function used to  Image picked from gallery/External Storage.
-
+ * This class handles Photos related functionlities.
+ * takePhoto method takes photo from camera, converts the photo to base64 & passes the result back to javascript.
+ * selectFromPhotos method selects photo from gallery/External Storage, converts the photo to base64 & passes the result back to javascript.
 */
 
 class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -50,10 +47,9 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
             return
         }
     }
+    
     /*
-        
-    *  takePhoto() function will intiate the Capture the poto from camera.
-
+    *  This method takes photo from camera, converts the photo to base64 & passes the result back to javascript.
     */
     
     func takePhoto() {
@@ -81,13 +77,11 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
                 }
           })
         }
-        
     }
-    /*
-     
-     * Here selectFromPhotos() function will Intiate the Phpoto Library,to Select the qr code image from Gallery.
-     */
     
+    /*
+     * This method selects photo from gallery/External Storage, converts the photo to base64 & passes the result back to javascript.
+     */
     
     func selectFromPhotos() {
           
@@ -145,7 +139,6 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
           }
       }
       
-      
       func Camera() {
         
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
@@ -182,10 +175,8 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
         photobase64 = Util.convertImageToBase64String(img: selectedImage) as String
         viewController?.dismiss(animated: true, completion: nil)
         if photobase64 != "" {
-            
             self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \(photobase64)'})")
         }
-        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

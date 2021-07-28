@@ -12,13 +12,10 @@ import Photos
 // , QRCodeReaderViewControllerDelegate protocol
 
 /*
-  * Qrcode Handle created to handle get data from Qrcode.
-  * this viewcontroller wil called from Javascript.
-  * scanCode() function used to scan qr from Camera.
-  * Select Qrcode from Photos.
-  * selectQRCodeFromPhotos() function used to read qrcode from Image picked from gallery/External Storage.
- 
- */
+ * This class handles QR code related functionlities.
+ * scanCode method scans the QR code from camera, reads it & passes the result back to javascript.
+ * selectQRCodeFromPhotos method selects QR code from gallery/External Storage, reads it & passes the result back to javascript.
+*/
 
 class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDelegate,UIImagePickerControllerDelegate, QRCodeReaderViewControllerDelegate  {
      var counter : Int = 0
@@ -26,11 +23,8 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     var bridgeView: BridgeView
     var viewController: UIViewController?
     
-    
     /*
-            
      * Bridgeview configuration with view and View controller.
-             
     */
     
     init(bridgeView: BridgeView, viewController: UIViewController?) {
@@ -39,10 +33,8 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     }
     
     /*
-     
-      * QRCodeHandler  class has been implemented here to perform their actions.
-
-     */
+     * QRCodeHandler  class has been implemented here to perform their actions.
+    */
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -53,10 +45,9 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         }
     }
     
-/*
-    * Open Qr function will intiate the Avkit framework choose csan the qr code.
-     
-*/
+   /*
+    * This method scans the QR code from camera, reads it & passes the result back to javascript.
+   */
     
     func scanCode() {
         
@@ -80,26 +71,19 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     /*
      * Qr code callback methods
      * Here the result will be sent to Javacript.
-     
-     */
-   
+    */
     
     func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
         reader.stopScanning()
         reader.dismiss(animated: true, completion: nil)
         viewController?.dismiss(animated: true, completion: nil)
         
-        var code = result.value
+        let code = result.value
         if code != ""  {
                     
                     let jsonData = code.data(using: .utf8)!
                     let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
-                    
-        //            if qrCode.phone != nil && qrCode.email != nil {
-        //
-        //                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
-        //            }
-                    
+                
                     if (qrCode.phone != nil) && (qrCode.email != nil) {
                         self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
                         
@@ -120,7 +104,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                         }
                     }
                     else if qrCode.email == nil {
-                        
+
                         if validateName(name: qrCode.name) {
                             
                             if qrCode.phone!.isValidPhoneNumber() {
@@ -131,7 +115,6 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                         } else {
                             self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
                         }
-                        
                     }
                 }
                 else {
@@ -139,8 +122,6 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                 }
     }
     
-   
-
     func readerDidCancel(_ reader: QRCodeReaderViewController) {
         reader.stopScanning()
         reader.dismiss(animated: true, completion: nil)
@@ -149,9 +130,8 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     }
     
     /*
-     
-     * Here selectQRCodeFromPhotos() function will Intiate the Phpoto Library,to Select the qr code image from Gallery.
-     */
+     * This method selects QR code from gallery/External Storage, reads it & passes the result back to javascript.
+    */
     
     func selectQRCodeFromPhotos() {
 
@@ -204,7 +184,6 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         else {
            return false
         }
-        
     }
 
     
@@ -227,27 +206,18 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
             let jsonData = code.data(using: .utf8)!
             let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
             
-//            if qrCode.phone != nil && qrCode.email != nil {
-//
-//                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
-//            }
-            
             if (qrCode.phone != nil) && (qrCode.email != nil) {
                 self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
                 
             } else if qrCode.phone == nil {
                 
                 if validateName(name: qrCode.name) {
-                    
                     if qrCode.email!.isValidEmail() {
                         self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Email: \(qrCode.email!) '})")
                     } else {
-                       
                         self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
                     }
-                    
                 } else {
-                    
                     self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Name")'})")
                 }
             }
@@ -263,7 +233,6 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                 } else {
                     self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
                 }
-                
             }
         }
         else {
@@ -272,12 +241,8 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     }
     
     /*
-     
-     * Here we are checking threeshold count and show the alertview to Navigate the zsettings page.
-     */
-    
-    
-    
+     * Here we are checking threeshold count and show the alertview to Navigate the settings page.
+    */
     
     func showSettingsAlerts(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         
@@ -296,5 +261,4 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
          })
          viewController?.present(alert, animated: true)
      }
-    
 }

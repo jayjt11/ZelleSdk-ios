@@ -7,36 +7,28 @@
 import Foundation
 import WebKit
 
- /*
-   
-   * Session handler created to handle app Sessions.
-   * this Viewcontroller will be from Javascript.
-   * sessionTimeout() function used to show alertView for the end user.
-    
+
+/*
+ * This class handles session related functionlities.
+ * sessionTimeout method displays the popup asking user to close the session or continue the current session.
 */
-   
 
 class SessionHandler: NSObject, WKScriptMessageHandler {
     var bridgeView: BridgeView
     var viewController: UIViewController?
     
-/*
-    
-    * Bridgeview configuration with view and View controller.
-     
-*/
-    
+    /*
+     * Bridgeview configuration with view and View controller.
+    */
     
     init(bridgeView: BridgeView, viewController: UIViewController?) {
         self.bridgeView = bridgeView
         self.viewController = viewController
     }
     
- /*
-      
-    *Session handler class has been implemented here to perform their actions.
-       
-*/
+    /*
+     * Session handler class has been implemented here to perform their actions.
+    */
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -46,11 +38,9 @@ class SessionHandler: NSObject, WKScriptMessageHandler {
         }
     }
     
-/*
-     
-    * Alertview will show based on the action to be needed.
-     
-*/
+    /*
+     *  This method displays the popup asking user to close the session or continue the current session.
+    */
 
     func sessionTimeout() {
         

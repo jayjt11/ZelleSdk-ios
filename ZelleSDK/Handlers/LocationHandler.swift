@@ -9,8 +9,12 @@ import Foundation
 import WebKit
 import MapKit
 
+/*
+ * This class handles location related functionlities.
+ * getLocation method returns the lattitude & longitude of the current location to javascript.
+*/
 
-class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelegate{
+class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelegate {
     var bridgeView: BridgeView
     
     var locManager = CLLocationManager()
@@ -21,8 +25,6 @@ class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelega
 
     init(bridgeView: BridgeView) {
         self.bridgeView = bridgeView
-
-       
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -32,28 +34,24 @@ class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelega
             return
         }
     }
-
+    
+    /*
+     * This method returns the lattitude & longitude of the current location to javascript.
+    */
+    
     func getLocation() {
         //locManager.requestWhenInUseAuthorization()
 
-        
-        if CLLocationManager.locationServicesEnabled()
-
-       {
+        if CLLocationManager.locationServicesEnabled() {
           if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
                 guard let currentLocation = locManager.location else {
                     return
-                            }
+          }
             self.bridgeView.evaluate(JS: "callbackLocation({location: '\("Lattitude \(currentLocation.coordinate.latitude) and Longtitude \(currentLocation.coordinate.longitude)")'})")
-
-                }
-               
-           
+            }
         }
-           }
-          
-        
+    }
     }
 
 
