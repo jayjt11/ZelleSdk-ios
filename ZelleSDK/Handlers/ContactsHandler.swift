@@ -10,7 +10,6 @@ import WebKit
 import Contacts
 import ContactsUI
 
-
 /*
  * ContactsHandler Handle created to handle the contacts.
  * this viewcontroller wil called from Javascript.

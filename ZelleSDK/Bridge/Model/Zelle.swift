@@ -11,6 +11,8 @@ public class Zelle: BridgeConfig {
     public var url: String
     public var preCacheContacts = false
     
+    // Original Instance
+    
     public init(
         institutionId: String,
         ssoKey: String,
@@ -22,7 +24,29 @@ public class Zelle: BridgeConfig {
         url += "?institutionId=\(institutionId)&key=\(ssoKey)"
         for param in parameters {
             url += "&\(param.key)=\(param.value)"
-            
+
         }
     }
+    
+    
+    // Url construction
+    
+//    public init(
+//        baseUrl :String,
+//        institutionId: String,
+//        product : String,
+//        ssoKey: String,
+//        title : String,
+//        parameters: [String:String]
+//    ) {
+//        UserDefaults.standard.set(title, forKey: "title")
+//        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+//        url = baseUrl
+//        url += "?institutionId=\(institutionId)&product=\(product)&container=Mobile_SDK_Iphone&version=\(version)&key=\(ssoKey)"
+//        for param in parameters {
+//            url += "&\(param.key)=\(param.value)"
+//
+//        }
+//    }
+    
 }

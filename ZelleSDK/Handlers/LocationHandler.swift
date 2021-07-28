@@ -7,12 +7,22 @@
 
 import Foundation
 import WebKit
-import CoreLocation
+import MapKit
 
-class LocationHandler: NSObject, WKScriptMessageHandler,CLLocationManagerDelegate {
+
+class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelegate{
     var bridgeView: BridgeView
+    
+    var locManager = CLLocationManager()
+       var currentLocation: CLLocation!
+    
+    var manager:CLLocationManager!
+       var locationManager:CLLocationManager!
+
     init(bridgeView: BridgeView) {
         self.bridgeView = bridgeView
+
+       
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -24,25 +34,32 @@ class LocationHandler: NSObject, WKScriptMessageHandler,CLLocationManagerDelegat
     }
 
     func getLocation() {
-        
-     let locationManager = CLLocationManager()
-        var userLatitude:CLLocationDegrees! = 0
-        var userLongitude:CLLocationDegrees! = 0
-        
-        if CLLocationManager.locationServicesEnabled() {
-            UserDefaults.standard.set(true, forKey: "location")
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.startMonitoringSignificantLocationChanges()
+        //locManager.requestWhenInUseAuthorization()
 
-            userLatitude  = locationManager.location?.coordinate.latitude
-            userLongitude  = locationManager.location?.coordinate.longitude
-            
-            self.bridgeView.evaluate(JS: "callbackLocation({location: '\("Currentlocation userLatitude is \(userLatitude!)")and userLongitude is \(userLongitude!)'})")
-        } else {
-            
-            UserDefaults.standard.set(false, forKey: "location")
+        
+        if CLLocationManager.locationServicesEnabled()
+
+       {
+          if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+                guard let currentLocation = locManager.location else {
+                    return
+                            }
+            self.bridgeView.evaluate(JS: "callbackLocation({location: '\("Lattitude \(currentLocation.coordinate.latitude) and Longtitude \(currentLocation.coordinate.longitude)")'})")
+
+                }
+               
+           
         }
-       
+           }
+          
+        
     }
-}
+
+
+
+  
+
+
+
+
