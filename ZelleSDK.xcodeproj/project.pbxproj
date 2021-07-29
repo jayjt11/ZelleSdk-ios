@@ -31,6 +31,7 @@
 		69974F7D2696E2F0003B0459 /* SessionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F7C2696E2F0003B0459 /* SessionHandler.swift */; };
 		69974F8726972B8D003B0459 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F8626972B8D003B0459 /* QRCode.swift */; };
 		69AE5EE326B15B12008AB09E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE226B15B12008AB09E /* Constants.swift */; };
+		69AE5EE526B18264008AB09E /* CachedContactsHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +60,7 @@
 		69974F7C2696E2F0003B0459 /* SessionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionHandler.swift; sourceTree = "<group>"; };
 		69974F8626972B8D003B0459 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		69AE5EE226B15B12008AB09E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedContactsHandlers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				695F34D52689BCE6004A8C47 /* ContactsHandler.swift */,
+				69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */,
 				695F34CF2689BCE6004A8C47 /* Handlers.swift */,
 				695F34D42689BCE6004A8C47 /* LocationHandler.swift */,
 				695F34D22689BCE6004A8C47 /* PermissionsHandler.swift */,
@@ -260,6 +263,7 @@
 				695F34DA2689BCE6004A8C47 /* PermissionsHandler.swift in Sources */,
 				695F34E92689BD31004A8C47 /* Bridge.swift in Sources */,
 				69974F7B2696D3CE003B0459 /* Contact1.swift in Sources */,
+				69AE5EE526B18264008AB09E /* CachedContactsHandlers.swift in Sources */,
 				695F34E82689BD31004A8C47 /* BridgeController.swift in Sources */,
 				695F34D72689BCE6004A8C47 /* Handlers.swift in Sources */,
 				695F34E52689BD23004A8C47 /* BridgeView.swift in Sources */,

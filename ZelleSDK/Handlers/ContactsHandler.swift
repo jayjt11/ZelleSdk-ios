@@ -52,8 +52,7 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     func fetchAllContact() {
         
         let store = CNContactStore()
-        var queue = ""
-        var arrayContact = [Contact1]()
+     //   var arrayContact = [Contact1]()
         do {
             let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
             let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
@@ -67,27 +66,61 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                 let name = firstName + " " + lastName
                 
                 if self.validateName(name: name) {
+                    var queue = ""
                     let contactPhoneNumbers = contact.phoneNumbers.map {
                         $0.value.stringValue }
-                    
                     
                     for number in contactPhoneNumbers {
                         let number1 = number.filter { ("0"..."9").contains($0) }
                         if number1.isValidPhoneNumber() {
-                            arrayContact.append(Contact1(name: name, phone: number1))
+                           // arrayContact.append(Contact1(name: name, phone: number1))
+//                            queue += """
+//                                cachedContacts.push(
+//                                    { \(Contact1(name: name, phone: number1)),
+//                                    }
+//                                );
+//                            """
+                            
+                            queue += """
+                                cachedContacts.push(
+                                    {
+                                        name: "\(name)",
+                                        phone: "\(number1)",
+                                    }
+                                );
+                            """
                         }
                     }
                     let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
                     let emailAddress = contactEmailAddresses.uniqued()
                     for email in emailAddress {
                         if email.isValidEmail() {
-                            arrayContact.append(Contact1(name: name, email: email))
+                          //  arrayContact.append(Contact1(name: name, email: email))
+//                            queue += """
+//                                cachedContacts.push(
+//                                    { \(Contact1(name: name, email: email)),
+//                                    }
+//                                );
+//                            """
+                            
+                            
+                            queue += """
+                                cachedContacts.push(
+                                    {
+                                        name: "\(name)",
+                                        email: "\(email)",
+                                    }
+                                );
+                            """
                         }
                     }
-                    let jsonEncoder = JSONEncoder()
-                    let jsonData = try! jsonEncoder.encode(arrayContact)
-                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
-                    queue = json!
+                    
+                    self.bridgeView.evaluate(JS: queue)
+//                    let jsonEncoder = JSONEncoder()
+//                    let jsonData = try! jsonEncoder.encode(arrayContact)
+//                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
+//                    queue = json!
+                    
                     
                 } else {
                     
@@ -97,8 +130,9 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                 UserDefaults.standard.set(Date(), forKey: "cachedContactsTS")
             }
             
+            self.bridgeView.evaluate(JS: "callbackContacts({cached: true})")
             
-            self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "\(queue)"))'})")
+          //  self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "\(queue)"))'})")
             
         } catch {
             print("Failed to fetch contact, error: \(error)")

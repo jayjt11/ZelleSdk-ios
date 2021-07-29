@@ -14,6 +14,10 @@ func configureHandlers(for bridgeView: BridgeView) -> WKWebViewConfiguration {
     let contactsHandler = ContactsHandler(bridgeView: bridgeView, viewController: bridgeView.viewController)
     config.userContentController.add(contactsHandler, name: "getContacts")
     config.userContentController.add(contactsHandler, name: "getOneContact")
+    
+//    let contactsHandler = CachedContactsHandlers(bridgeView: bridgeView, viewController: bridgeView.viewController)
+//    config.userContentController.add(contactsHandler, name: "getContacts")
+//    config.userContentController.add(contactsHandler, name: "getOneContact")
 
     let qrCodeHandler = QRCodeHandler(bridgeView: bridgeView, viewController: bridgeView.viewController)
     config.userContentController.add(qrCodeHandler, name: "scanQRCode")
