@@ -46,7 +46,7 @@ class ContactsHandler1: NSObject, WKScriptMessageHandler, CNContactPickerDelegat
     }
     
     /*
-     * This method is used to get all contacts and send result to Javascript.
+     * This method is used to get all contacts and send result to javascript.
     */
     
     func fetchAllContact() {

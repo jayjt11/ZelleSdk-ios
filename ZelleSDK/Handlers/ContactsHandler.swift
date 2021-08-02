@@ -11,12 +11,9 @@ import Contacts
 import ContactsUI
 
 /*
- * ContactsHandler Handle created to handle the contacts.
- * this viewcontroller wil called from Javascript.
- * getContacts() function used to get the allcontacts from CnContact framework.
-
- * getOneContact() function used to get single contact from Cncontact framework.
-
+ * ContactsHandler class handles the contacts related functionalities.
+ * getContacts function is used to get the all contacts from CnContact framework.
+ * getOneContact function used to get single contact from Cncontact framework.
 */
 
 class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate {
@@ -25,12 +22,9 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     var counter : Int = 0
     private let cacheValidityPeriod = 86400.0 //one day
     
-    
-/*
-               
-* Bridgeview configuration with view and View controller.
-                
-*/
+    /*
+    * This method intiliazes the ContactsHandler class with paramemters bridgeView & viewController.
+    */
        
     init(bridgeView: BridgeView, viewController: UIViewController?) {
         self.bridgeView = bridgeView
@@ -38,11 +32,8 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     }
     
     /*
-           
-      *ContactsHandler class has been implemented here to perform their actions.
-
+     *This method interacts with javascript & returns the method name called by javascript postmessage method.
     */
-    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
         case "getContacts": getContacts()
@@ -53,70 +44,8 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     }
     
     /*
-     * fetchAllContact1() function is used to get all contacts and send data to Javascript.
-     
-     */
-    
-//    func fetchAllContact1() {
-//
-//                let store = CNContactStore()
-//                var queue = ""
-//                var arrayContact = [Contact1]()
-//                do {
-//                    let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
-//                    let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
-//                    var count = 0
-//                    self.bridgeView.evaluate(JS: "var cachedContacts = [];")
-//                    try store.enumerateContacts(with: fetchRequest) { (contact, _) in
-//                        count += 1
-//
-//                        var firstName = contact.givenName
-//                        var lastName = contact.familyName
-//                        var name = firstName + " " + lastName
-//
-//                        if self.validateName(name: name) {
-//                            let contactPhoneNumbers = contact.phoneNumbers.map {
-//                                $0.value.stringValue }
-//
-//
-//                            for number in contactPhoneNumbers {
-//                                var number1 = number.filter { ("0"..."9").contains($0) }
-//                                if number1.isValidPhoneNumber() {
-//
-//                                    arrayContact.append(Contact1(name: name, phone: number1))
-//                                }
-//                            }
-//                            let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
-//                            var emailAddress = contactEmailAddresses.uniqued()
-//                            for email in emailAddress {
-//                                if email.isValidEmail() {
-//                                    arrayContact.append(Contact1(name: name, email: email))
-//                                }
-//                            }
-//
-//
-//                            let jsonEncoder = JSONEncoder()
-//                            let jsonData = try! jsonEncoder.encode(arrayContact)
-//                            let json = String(data: jsonData, encoding: String.Encoding.utf8)
-//
-//                            queue = json!
-//
-//                        } else {
-//
-//                            self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "Invalid name"))'})")
-//                        }
-//
-//                        UserDefaults.standard.set(Date(), forKey: "cachedContactsTS")
-//                    }
-//
-//
-//                    self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "\(queue)"))'})")
-//
-//                } catch {
-//                    print("Failed to fetch contact, error: \(error)")
-//                }
-//
-//    }
+     *This method fetches all the contacts from native contact app.
+    */
     
     func fetchAllContact() {
         
@@ -200,6 +129,10 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
             
         }
     
+    /*
+     *This method is used to get all contacts and send result to Javascript.
+    */
+    
     func getContacts() {
         
         requestAccess { (true) in
@@ -215,6 +148,9 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
         }
     }
     
+    /*
+     *This method checks for permission required to read the contacts
+    */
  
     func requestAccess(completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         switch CNContactStore.authorizationStatus(for: .contacts) {
@@ -249,10 +185,8 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     }
     
     /*
-    
-    * Here we are checking threeshold count and show the alertview to Navigate the zsettings page.
+    * This method checks for threeshold count and show the alertview to Navigate the settings page.
     */
-    
     
     private func showSettingsAlert(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         
@@ -273,21 +207,18 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     }
     
     /*
-     
-    * getOneContact() function is used to get the contact and send data to Javascript.
-    
+    * This method is used to get the single contact and send result to Javascript.
     */
     
     func getOneContact() {
-        
         let contactPicker = CNContactPickerViewController()
-        
         contactPicker.delegate = self
         viewController?.present(contactPicker, animated: true, completion: nil)
-        
-
     }
-   
+    
+    /*
+    * This method validates the contact name.
+    */
     
     func validateName(name: String) -> Bool {
         
@@ -299,6 +230,12 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
         }
         
     }
+    
+    // CNContactPickerDelegate methods
+    
+    /*
+    * This method allows user to select single contact & navigates to detial page, where user can select the phone number or email.
+    */
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
         
@@ -360,12 +297,14 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
         
         break
     } }
+    
+    // CNContactPickerDelegate methods
+    /*
+    * This method cancels the contact details page.
+    */
 
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         
         self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \("User cancelled the request")'})")
     }
-    
-  
-    
 }
