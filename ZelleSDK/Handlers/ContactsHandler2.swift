@@ -19,7 +19,7 @@ import ContactsUI
 
 */
 
-class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate {
+class ContactsHandler2: NSObject, WKScriptMessageHandler, CNContactPickerDelegate {
     var bridgeView: BridgeView
     var viewController: UIViewController?
     var counter : Int = 0
@@ -121,14 +121,37 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     func fetchAllContact() {
         
         //check TS of last caching
+        print("######### Getting from local cache")
         if let lastCacheTS = UserDefaults.standard.object(forKey: "cachedContactsTS") as? Date {
             let timeInterval = Date().timeIntervalSince(lastCacheTS)
             if (Date().timeIntervalSince(lastCacheTS) < cacheValidityPeriod) {
                 if let cachedContacts = UserDefaults.standard.array(forKey: "cachedContacts") {
-                    print("######### Getting from Userdefaults")
-                    print("######### \(String(describing: cachedContacts))")
+                    
+                    
+//                    var contactPhone = Contact1(name: "Jayant Tiwari", phone: "9867608869")
+//
+//                    var contactEmail = Contact1(name: "Jayant Tiwari", email: "amitt.jt@gmail.com")
+//                    var newCachedContact = [Contact1]()
+//                    newCachedContact.append(contactPhone)
+//                    newCachedContact.append(contactEmail)
+//
+//                    let jsonEncoder = JSONEncoder()
+//                    let jsonData = try! jsonEncoder.encode(newCachedContact)
+//                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
+//                    //queue = json!
+                    
+                    print("#########Old \(String(describing: cachedContacts))")
+                    
+                  //  print("#########New \(String(describing: json!))")
+                    print("######### Getting from SharedPreferences")
+                 //   self.bridgeView.evaluate(JS: "var cachedContacts = [];")
+                    
+                    
                     self.bridgeView.evaluate(JS: "var cachedContacts = \(cachedContacts);") //{ print($0, $1) }
+
+                    //print("######### Getting from SharedPreferences 1")
                     self.bridgeView.evaluate(JS: "callbackContacts({cached: true})") //{ print($0, $1) }
+                    print("######### Getting from SharedPreferences 1")
                     return
                 }
             }
@@ -141,6 +164,7 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                 let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
                 let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
                 var count = 0
+                var queue1 = ""
                 self.bridgeView.evaluate(JS: "var cachedContacts = [];")
                 try store.enumerateContacts(with: fetchRequest) { (contact, _) in
                     count += 1
@@ -148,7 +172,10 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                     let firstName = contact.givenName
                     let lastName = contact.familyName
                     let name = firstName + " " + lastName
+                    
                     var queue = ""
+                    queue1 = queue
+                    
                     if self.validateName(name: name) {
                         let contactPhoneNumbers = contact.phoneNumbers.map {
                             $0.value.stringValue }
@@ -157,6 +184,13 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                             let number1 = number.filter { ("0"..."9").contains($0) }
                             if number1.isValidPhoneNumber() {
                                 arrayContact.append(Contact1(name: name, phone: number1))
+    //                            queue += """
+    //                                cachedContacts.push(
+    //                                    { \(Contact1(name: name, phone: number1)),
+    //                                    }
+    //                                );
+    //                            """
+                                
                                 queue += """
                                     cachedContacts.push(
                                         {
@@ -172,6 +206,14 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                         for email in emailAddress {
                             if email.isValidEmail() {
                                 arrayContact.append(Contact1(name: name, email: email))
+    //                            queue += """
+    //                                cachedContacts.push(
+    //                                    { \(Contact1(name: name, email: email)),
+    //                                    }
+    //                                );
+    //                            """
+                                
+                                
                                 queue += """
                                     cachedContacts.push(
                                         {
@@ -182,8 +224,23 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                                 """
                             }
                         }
+                        
+                        print("Queue 1 \(queue)")
                         self.bridgeView.evaluate(JS: queue)
+    //                    let jsonEncoder = JSONEncoder()
+    //                    let jsonData = try! jsonEncoder.encode(arrayContact)
+    //                    let json = String(data: jsonData, encoding: String.Encoding.utf8)
+    //                    queue = json!
+                        
+                        
                     }
+    //                else {
+    //
+    //                    self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "Invalid name"))'})")
+    //                }
+                    
+                 //   print((String(describing: "\(queue)")))
+                   // UserDefaults.standard.set(Date(), forKey: "cachedContactsTS")
                 }
                 
                 let jsonEncoder = JSONEncoder()
@@ -193,6 +250,9 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
                 print("json 1 \(json!)")
                 self.bridgeView.saveCachedContacts(cachedContacts: json!)
                 self.bridgeView.evaluate(JS: "callbackContacts({cached: true})")
+              //  self.bridgeView.evaluate(JS: "var cachedContacts = [];")
+                
+              //  self.bridgeView.evaluate(JS: "callbackContacts({cached :' \(String(describing: "\(queue)"))'})")
                 
             } catch {
                 print("Failed to fetch contact, error: \(error)")

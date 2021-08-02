@@ -32,6 +32,8 @@
 		69974F8726972B8D003B0459 /* QRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69974F8626972B8D003B0459 /* QRCode.swift */; };
 		69AE5EE326B15B12008AB09E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE226B15B12008AB09E /* Constants.swift */; };
 		69AE5EE526B18264008AB09E /* CachedContactsHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */; };
+		69AE5EE726B2CD16008AB09E /* ContactsHandler1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */; };
+		69AF473326B7D486003D6CE5 /* ContactsHandler2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +63,8 @@
 		69974F8626972B8D003B0459 /* QRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCode.swift; sourceTree = "<group>"; };
 		69AE5EE226B15B12008AB09E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedContactsHandlers.swift; sourceTree = "<group>"; };
+		69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler1.swift; sourceTree = "<group>"; };
+		69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +157,8 @@
 				695F34D02689BCE6004A8C47 /* QRCodeHandler.swift */,
 				695F34D12689BCE6004A8C47 /* ShareHandler.swift */,
 				69974F7C2696E2F0003B0459 /* SessionHandler.swift */,
+				69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */,
+				69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -272,10 +278,12 @@
 				692FE74526AAC80C00E5519D /* Permission.swift in Sources */,
 				695F34D62689BCE6004A8C47 /* PopupHandler.swift in Sources */,
 				695F34DD2689BCE6004A8C47 /* ContactsHandler.swift in Sources */,
+				69AE5EE726B2CD16008AB09E /* ContactsHandler1.swift in Sources */,
 				695F34DC2689BCE6004A8C47 /* LocationHandler.swift in Sources */,
 				695F34E42689BD23004A8C47 /* BridgePopup.swift in Sources */,
 				69974F8726972B8D003B0459 /* QRCode.swift in Sources */,
 				695F34E02689BD03004A8C47 /* BridgeConfig.swift in Sources */,
+				69AF473326B7D486003D6CE5 /* ContactsHandler2.swift in Sources */,
 				695F355A268DCF4F004A8C47 /* Contact.swift in Sources */,
 				695F34E12689BD03004A8C47 /* Zelle.swift in Sources */,
 				695F34DB2689BCE6004A8C47 /* PhotosHandler.swift in Sources */,

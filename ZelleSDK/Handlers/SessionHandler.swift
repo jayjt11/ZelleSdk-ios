@@ -49,13 +49,13 @@ class SessionHandler: NSObject, WKScriptMessageHandler {
         alert.addAction(UIAlertAction(title: "Proceed", style: .default, handler: { _ in
                 
                DispatchQueue.main.async {
-                   exit(0)
+                alert.dismiss(animated: true)
                }
             }))
         alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
 
            DispatchQueue.main.async {
-            alert.dismiss(animated: true)
+            exit(0)
            }
         
         DispatchQueue.main.async {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Contact1 : Codable {
+public struct Contact1 : Codable {
     
     var name : String?
     var phone : String?
