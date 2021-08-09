@@ -8,12 +8,18 @@ import UIKit
 import WebKit
 
 public class BridgePopup: UIView, BridgeDelegate {
+    
+/*
+* Will be shown to user as popup which will be integrated to the activity/Viewcontroller in the parent app
+*/
 
     public lazy var bridgeView: BridgeView = { BridgeView(frame: frame, config: config, viewController: self.viewController) }()
     internal var config: BridgeConfig
     internal var viewController: UIViewController
     
-    //initWithFrame to init view from code
+    /*
+    *initWithFrame to init view from code
+    */
     public init(anchor: UIView, config: BridgeConfig, viewController: UIViewController) {
         self.viewController = viewController
         self.config = config
@@ -21,7 +27,9 @@ public class BridgePopup: UIView, BridgeDelegate {
         setupView()
     }
     
-    //initWithCode to init view from xib or storyboard
+    /*
+    *initWithCode to init view from xib or storyboard
+    */
     required init?(coder aDecoder: NSCoder) {
         config = RawConfig(url: "")
         viewController = UIViewController()

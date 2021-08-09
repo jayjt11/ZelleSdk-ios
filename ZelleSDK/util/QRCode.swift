@@ -8,6 +8,12 @@
 
 import Foundation
 
+/*
+*Model class for QRCode
+*/
+
+
+
 struct QRCode : Decodable {
     
     var name : String

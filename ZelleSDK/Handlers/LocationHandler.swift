@@ -2,7 +2,7 @@
 //  LocationHandler.swift
 //  BridgeSDK
 //
-//  Created by omar.ata on 5/26/21.
+//  Created by fiserv on 5/26/21.
 //
 
 import Foundation
@@ -10,21 +10,29 @@ import WebKit
 import CoreLocation
 
 /*
- * This class handles location related functionlities.
- * getLocation method returns the lattitude & longitude of the current location to javascript.
+ * LocationHandler class handles the location related functionlities.
+ * getLocation method used to get the lattitude & longitude of the current location send data to javascript.
 */
+
+
 class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelegate {
   var bridgeView: BridgeView
 
      var locationManager:CLLocationManager?
     var viewController: UIViewController?
 
+/*
+* This method intiliazes the LocationHandler class with paramemters bridgeView & viewController.
+*/
 
  init(bridgeView: BridgeView, viewController: UIViewController?) {
       self.bridgeView = bridgeView
       self.viewController = viewController
   }
   
+ /*
+  *This method interacts with javascript & returns the method name called by javascript postmessage method.
+ */
   func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
       switch message.name {
       case "getLocation": getLocation()
@@ -34,7 +42,7 @@ class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelega
   }
   
   /*
-   * This method returns the lattitude & longitude of the current location to javascript.
+   * getLocation method used to get the lattitude & longitude of the current location send data to javascript.
   */
   
   func getLocation() {
@@ -52,14 +60,17 @@ class LocationHandler: NSObject, WKScriptMessageHandler ,CLLocationManagerDelega
         
     }
     
-   
+   /*
+    * getUserLocation method used to set the delegate for Location manager.
+   */
+
     
-    func getUserLocation() {
+  func getUserLocation() {
    locationManager = CLLocationManager()
- locationManager?.delegate = self
+   locationManager?.delegate = self
    locationManager?.requestAlwaysAuthorization()
    locationManager?.startUpdatingLocation()
- }
+  }
   }
 
 

@@ -50,83 +50,83 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     func fetchAllContact() {
         
         //check TS of last caching
-        if let lastCacheTS = UserDefaults.standard.object(forKey: "cachedContactsTS") as? Date {
-            let timeInterval = Date().timeIntervalSince(lastCacheTS)
-            if (Date().timeIntervalSince(lastCacheTS) < cacheValidityPeriod) {
-                if let cachedContacts = UserDefaults.standard.array(forKey: "cachedContacts") {
-                    print("######### Getting from Userdefaults")
-                    print("######### \(String(describing: cachedContacts))")
-                    self.bridgeView.evaluate(JS: "var cachedContacts = \(cachedContacts);") //{ print($0, $1) }
-                    self.bridgeView.evaluate(JS: "callbackContacts({cached: true})") //{ print($0, $1) }
-                    return
-                }
+    if let lastCacheTS = UserDefaults.standard.object(forKey: "cachedContactsTS") as? Date {
+        let timeInterval = Date().timeIntervalSince(lastCacheTS)
+        if (Date().timeIntervalSince(lastCacheTS) < cacheValidityPeriod) {
+            if let cachedContacts = UserDefaults.standard.array(forKey: "cachedContacts") {
+                print("######### Getting from Userdefaults")
+                print("######### \(String(describing: cachedContacts))")
+                self.bridgeView.evaluate(JS: "var cachedContacts = \(cachedContacts);") //{ print($0, $1) }
+                self.bridgeView.evaluate(JS: "callbackContacts({cached: true})") //{ print($0, $1) }
+                return
             }
         }
-            
-        print("######### Getting from Contact")
-            let store = CNContactStore()
-            var arrayContact = [Contact1]()
-            do {
-                let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
-                let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
-                var count = 0
-                self.bridgeView.evaluate(JS: "var cachedContacts = [];")
-                try store.enumerateContacts(with: fetchRequest) { (contact, _) in
-                    count += 1
+    }
+        
+    print("######### Getting from Contact")
+        let store = CNContactStore()
+        var arrayContact = [Contact1]()
+        do {
+            let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactEmailAddressesKey] as [CNKeyDescriptor]
+            let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
+            var count = 0
+            self.bridgeView.evaluate(JS: "var cachedContacts = [];")
+            try store.enumerateContacts(with: fetchRequest) { (contact, _) in
+                count += 1
+                
+                let firstName = contact.givenName
+                let lastName = contact.familyName
+                let name = firstName + " " + lastName
+                var queue = ""
+                if self.validateName(name: name) {
+                    let contactPhoneNumbers = contact.phoneNumbers.map {
+                        $0.value.stringValue }
                     
-                    let firstName = contact.givenName
-                    let lastName = contact.familyName
-                    let name = firstName + " " + lastName
-                    var queue = ""
-                    if self.validateName(name: name) {
-                        let contactPhoneNumbers = contact.phoneNumbers.map {
-                            $0.value.stringValue }
-                        
-                        for number in contactPhoneNumbers {
-                            let number1 = number.filter { ("0"..."9").contains($0) }
-                            if number1.isValidPhoneNumber() {
-                                arrayContact.append(Contact1(name: name, phone: number1))
-                                queue += """
-                                    cachedContacts.push(
-                                        {
-                                            name: "\(name)",
-                                            phone: "\(number1)",
-                                        }
-                                    );
-                                """
-                            }
+                    for number in contactPhoneNumbers {
+                        let number1 = number.filter { ("0"..."9").contains($0) }
+                        if number1.isValidPhoneNumber() {
+                            arrayContact.append(Contact1(name: name, phone: number1))
+                            queue += """
+                                cachedContacts.push(
+                                    {
+                                        name: "\(name)",
+                                        phone: "\(number1)",
+                                    }
+                                );
+                            """
                         }
-                        let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
-                        let emailAddress = contactEmailAddresses.uniqued()
-                        for email in emailAddress {
-                            if email.isValidEmail() {
-                                arrayContact.append(Contact1(name: name, email: email))
-                                queue += """
-                                    cachedContacts.push(
-                                        {
-                                            name: "\(name)",
-                                            email: "\(email)",
-                                        }
-                                    );
-                                """
-                            }
-                        }
-                        self.bridgeView.evaluate(JS: queue)
                     }
+                    let contactEmailAddresses = contact.emailAddresses.map { $0.value as String }
+                    let emailAddress = contactEmailAddresses.uniqued()
+                    for email in emailAddress {
+                        if email.isValidEmail() {
+                            arrayContact.append(Contact1(name: name, email: email))
+                            queue += """
+                                cachedContacts.push(
+                                    {
+                                        name: "\(name)",
+                                        email: "\(email)",
+                                    }
+                                );
+                            """
+                        }
+                    }
+                    self.bridgeView.evaluate(JS: queue)
                 }
-                
-                let jsonEncoder = JSONEncoder()
-                let jsonData = try! jsonEncoder.encode(arrayContact)
-                let json = String(data: jsonData, encoding: String.Encoding.utf8)
-                
-                print("json 1 \(json!)")
-                self.bridgeView.saveCachedContacts(cachedContacts: json!)
-                self.bridgeView.evaluate(JS: "callbackContacts({cached: true})")
-                
-            } catch {
-                print("Failed to fetch contact, error: \(error)")
             }
             
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try! jsonEncoder.encode(arrayContact)
+            let json = String(data: jsonData, encoding: String.Encoding.utf8)
+            
+            print("json 1 \(json!)")
+            self.bridgeView.saveCachedContacts(cachedContacts: json!)
+            self.bridgeView.evaluate(JS: "callbackContacts({cached: true})")
+            
+        } catch {
+            print("Failed to fetch contact, error: \(error)")
+        }
+        
         }
     
     /*
@@ -190,12 +190,12 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     
     private func showSettingsAlert(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         
-        var title = UserDefaults.standard.string(forKey: "title")
-        let alert = UIAlertController(title: title, message: "This app requires access to Contacts to proceed. Go to Settings to grant access.", preferredStyle: .alert)
+        let title = UserDefaults.standard.string(forKey: "title")
+        let alert = UIAlertController(title: title, message: Constants.contactMsg, preferredStyle: .alert)
         if
             let settings = URL(string: UIApplication.openSettingsURLString),
             UIApplication.shared.canOpenURL(settings) {
-                alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
+            alert.addAction(UIAlertAction(title: Constants.settingsStr, style: .default) { action in
                     completionHandler(false)
                     UIApplication.shared.open(settings)
                 })
@@ -239,64 +239,64 @@ class ContactsHandler: NSObject, WKScriptMessageHandler, CNContactPickerDelegate
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
         
-        var firstName = contactProperty.contact.givenName
-        var lastName = contactProperty.contact.familyName
+        let firstName = contactProperty.contact.givenName
+        let lastName = contactProperty.contact.familyName
         var name = firstName + " " + lastName
         name = name.trimmingLeadingAndTrailingSpaces()
         
     switch contactProperty.key {
     case CNContactPhoneNumbersKey:
         
-        viewController?.dismiss(animated: true, completion: nil)
-        if let phoneNo = contactProperty.value as? CNPhoneNumber {
-                    if validateName(name: name) {
-                        var number  = phoneNo.stringValue
-                        number = number.filter { ("0"..."9").contains($0) }
-                        if number.isValidPhoneNumber() {
-                            var contactPhone = Contact1(name: name, phone: number)
-                            let jsonEncoder = JSONEncoder()
-                            let jsonData = try! jsonEncoder.encode(contactPhone)
-                            let jsonPhone = String(data: jsonData, encoding: String.Encoding.utf8)
+    viewController?.dismiss(animated: true, completion: nil)
+    if let phoneNo = contactProperty.value as? CNPhoneNumber {
+        if validateName(name: name) {
+            var number  = phoneNo.stringValue
+            number = number.filter { ("0"..."9").contains($0) }
+            if number.isValidPhoneNumber() {
+                let contactPhone = Contact1(name: name, phone: number)
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try! jsonEncoder.encode(contactPhone)
+                let jsonPhone = String(data: jsonData, encoding: String.Encoding.utf8)
 
-                            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: jsonPhone!))'})")
+                self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: jsonPhone!))'})")
 
-                        } else {
-                            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: "Invalid Phone Number"))'})")
-                        }
-                    } else {
-                        self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: "Invalid name"))'})")
-                    }
+            } else {
+                self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: Constants.InvalidPhone))'})")
+            }
+        } else {
+            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: Constants.InvalidName))'})")
+        }
 
-                   }
+               }
     // case ...: // some other type
         
-        case CNContactEmailAddressesKey:
-            viewController?.dismiss(animated: true, completion: nil)
-        if let contactEmailAddresses = contactProperty.contact.emailAddresses.first?.value {
+    case CNContactEmailAddressesKey:
+        viewController?.dismiss(animated: true, completion: nil)
+    if let contactEmailAddresses = contactProperty.contact.emailAddresses.first?.value {
 
-                    if validateName(name: name) {
+        if validateName(name: name) {
 
-                        let email  = contactEmailAddresses as String
+            let email  = contactEmailAddresses as String
 
-                        if email.isValidEmail() {
+            if email.isValidEmail() {
 
-                            var contactEmail = Contact1(name: name, email: email)
-                            let jsonEncoder = JSONEncoder()
-                            let jsonData = try! jsonEncoder.encode(contactEmail)
-                            let jsonEmail = String(data: jsonData, encoding: String.Encoding.utf8)
-                            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: jsonEmail!))'})")
-                        } else {
-                            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: "Invalid Email Address"))'})")
-                        }
-                    } else {
-                        self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: "Invalid name"))'})")
-                    }
-                   }
+                let contactEmail = Contact1(name: name, email: email)
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try! jsonEncoder.encode(contactEmail)
+                let jsonEmail = String(data: jsonData, encoding: String.Encoding.utf8)
+                self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: jsonEmail!))'})")
+            } else {
+                self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: Constants.InvaliEmail))'})")
+            }
+        } else {
+            self.bridgeView.evaluate(JS: "callbackOneContact({contact :' \(String(describing: Constants.InvalidName))'})")
+        }
+               }
+
+default:
     
-    default:
-        
-        break
-    } }
+    break
+} }
     
     // CNContactPickerDelegate methods
     /*

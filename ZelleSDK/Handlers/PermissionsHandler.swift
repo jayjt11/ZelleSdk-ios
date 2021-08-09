@@ -2,15 +2,16 @@
 //  PermissionsHandler.swift
 //  BridgeSDK
 //
-//  Created by omar.ata on 5/26/21.
+//  Created by fiserv on 5/26/21.
 //
 
 import Foundation
 import WebKit
 
+
 /*
- * This class handles permission related functionlities.
- * checkPermissions method returns the status of permissions required to access the functionalities.
+ * PermissionsHandler class handles the permissions related functionalities.
+ * checkPermissions function is used to check the permissions required to access the functionalities
 */
 
 class PermissionsHandler: NSObject, WKScriptMessageHandler {
@@ -19,7 +20,9 @@ class PermissionsHandler: NSObject, WKScriptMessageHandler {
     init(bridgeView: BridgeView) {
         self.bridgeView = bridgeView
     }
-    
+    /*
+     *This method interacts with javascript & returns the method name called by javascript postmessage method.
+    */
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
         case "checkPermissions": checkPermissions()
@@ -28,8 +31,9 @@ class PermissionsHandler: NSObject, WKScriptMessageHandler {
         }
     }
 
+   
     /*
-     * This method method returns the status of permissions required to access the functionalities to the javascript.
+     * checkPermissions method method returns the status of permissions required to access the functionalities to the javascript
     */
     
     func checkPermissions() {

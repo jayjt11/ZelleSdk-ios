@@ -362,8 +362,8 @@ class ContactsHandler2: NSObject, WKScriptMessageHandler, CNContactPickerDelegat
     
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
         
-        var firstName = contactProperty.contact.givenName
-        var lastName = contactProperty.contact.familyName
+        let firstName = contactProperty.contact.givenName
+        let lastName = contactProperty.contact.familyName
         var name = firstName + " " + lastName
         name = name.trimmingLeadingAndTrailingSpaces()
         
@@ -376,7 +376,7 @@ class ContactsHandler2: NSObject, WKScriptMessageHandler, CNContactPickerDelegat
                         var number  = phoneNo.stringValue
                         number = number.filter { ("0"..."9").contains($0) }
                         if number.isValidPhoneNumber() {
-                            var contactPhone = Contact1(name: name, phone: number)
+                            let contactPhone = Contact1(name: name, phone: number)
                             let jsonEncoder = JSONEncoder()
                             let jsonData = try! jsonEncoder.encode(contactPhone)
                             let jsonPhone = String(data: jsonData, encoding: String.Encoding.utf8)
@@ -403,7 +403,7 @@ class ContactsHandler2: NSObject, WKScriptMessageHandler, CNContactPickerDelegat
 
                         if email.isValidEmail() {
 
-                            var contactEmail = Contact1(name: name, email: email)
+                            let contactEmail = Contact1(name: name, email: email)
                             let jsonEncoder = JSONEncoder()
                             let jsonData = try! jsonEncoder.encode(contactEmail)
                             let jsonEmail = String(data: jsonData, encoding: String.Encoding.utf8)

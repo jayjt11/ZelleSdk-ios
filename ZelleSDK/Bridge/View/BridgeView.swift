@@ -1,7 +1,7 @@
 //
 //  Fiserv
 //
-//  Created by omar.ata on 4/9/21.
+//  Created by fiserv on 4/9/21.
 //
 
 import UIKit
@@ -10,12 +10,21 @@ import WebKit
 
 
 public class BridgeView: UIView, BridgeDelegate, WKUIDelegate {
+    
+/*
+ * Will be shown to user as view which will be integrated to the activity/Viewcontroller in the parent app
+ */
 
 public var webView: WKWebView?
 internal var config: BridgeConfig
 internal var viewController: UIViewController
+    
+    
 
-//initWithFrame to init view from code
+/*
+*initWithFrame to init view from code
+*/
+
 public init(frame: CGRect, config: BridgeConfig, viewController: UIViewController) {
     self.viewController = viewController
     self.config = config
@@ -23,7 +32,9 @@ public init(frame: CGRect, config: BridgeConfig, viewController: UIViewControlle
     setupView()
 }
 
-//initWithCode to init view from xib or storyboard
+/*
+*initWithCode to init view from xib or storyboard
+*/
 required init?(coder aDecoder: NSCoder) {
     config = RawConfig(url: "")
     viewController = UIViewController()

@@ -8,17 +8,19 @@ import Foundation
 import WebKit
 
 
+
+
 /*
- * This class handles session related functionlities.
- * sessionTimeout method displays the popup asking user to close the session or continue the current session.
+ * SessionHandler class handles the session related functionalities.
+ * sessionTimeout method displays the popup asking user to close the session or continue the current session
 */
 
 class SessionHandler: NSObject, WKScriptMessageHandler {
     var bridgeView: BridgeView
     var viewController: UIViewController?
     
-    /*
-     * Bridgeview configuration with view and View controller.
+   /*
+    * This method intiliazes the SessionHandler class with paramemters bridgeView & viewController.
     */
     
     init(bridgeView: BridgeView, viewController: UIViewController?) {
@@ -44,7 +46,7 @@ class SessionHandler: NSObject, WKScriptMessageHandler {
 
     func sessionTimeout() {
         
-        let alert = UIAlertController(title: "Session Timeout", message: "Session is about to expire, Do you want to continue?", preferredStyle: .alert)
+        let alert = UIAlertController(title: Constants.SessionTimeout, message: Constants.sessionMsg, preferredStyle: .alert)
             
         alert.addAction(UIAlertAction(title: "Proceed", style: .default, handler: { _ in
                 

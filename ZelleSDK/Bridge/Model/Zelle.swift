@@ -24,7 +24,6 @@ public class Zelle: BridgeConfig {
         url += "?institutionId=\(institutionId)&key=\(ssoKey)"
         for param in parameters {
             url += "&\(param.key)=\(param.value)"
-
         }
     }
     
@@ -34,7 +33,7 @@ public class Zelle: BridgeConfig {
 //    public init(
 //        baseUrl :String,
 //        institutionId: String,
-//        product : String,
+//        product: String,
 //        ssoKey: String,
 //        title : String,
 //        parameters: [String:String]
@@ -42,11 +41,12 @@ public class Zelle: BridgeConfig {
 //        UserDefaults.standard.set(title, forKey: "title")
 //        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
 //        url = baseUrl
-//        url += "?institutionId=\(institutionId)&product=\(product)&container=Mobile_SDK_Iphone&version=\(version)&key=\(ssoKey)"
+//        url += "?institutionId=\(institutionId)&product=\(product)&container=zelle_sdk_ios&version=\(version)&key=\(ssoKey)"
 //        for param in parameters {
 //            url += "&\(param.key)=\(param.value)"
 //
 //        }
-//    }
-    
+//
+//        print("Url is \(url)")
+//   }
 }

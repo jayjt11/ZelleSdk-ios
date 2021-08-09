@@ -8,6 +8,11 @@
 
 import Foundation
 
+/*
+*Model class for Permission
+*/
+
+
 struct Permission : Codable {
     
     var contact : Bool?
@@ -16,10 +21,11 @@ struct Permission : Codable {
     var location : Bool?
     
     init(contact : Bool, camera : Bool, photos : Bool, location : Bool) {
-        self.contact = contact
-        self.camera = camera
-        self.photos = photos
-        self.location = location
+        
+    self.contact = contact
+    self.camera = camera
+    self.photos = photos
+    self.location = location
         
     }
     

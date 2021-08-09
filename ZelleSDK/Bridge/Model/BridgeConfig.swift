@@ -2,10 +2,14 @@
 //  BridgeConfig.swift
 //  BridgeSDK
 //
-//  Created by omar.ata on 5/26/21.
+//  Created by fiserv on 5/26/21.
 //
 
 import Foundation
+
+/*
+ * Ii contains the configuration parameters
+ */
 
 public protocol BridgeConfig {
     var url: String { get set }

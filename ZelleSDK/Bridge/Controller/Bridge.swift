@@ -2,10 +2,14 @@
 //  Bridge.swift
 //  BridgeSDK
 //
-//  Created by omar.ata on 5/26/21.
+//  Created by fiserv on 5/26/21.
 //
 
 import UIKit
+
+/*
+*Bridge Contains the views(bridgeview and Bridge popup)
+ */
 
 protocol BridgeDelegate {
     var config: BridgeConfig { get set }

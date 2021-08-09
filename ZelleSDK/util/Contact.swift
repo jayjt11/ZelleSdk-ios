@@ -8,6 +8,10 @@
 
 import UIKit
 
+/*
+ *Model class for Contact
+ */
+
 struct Contact : Codable {
     
     var name : String

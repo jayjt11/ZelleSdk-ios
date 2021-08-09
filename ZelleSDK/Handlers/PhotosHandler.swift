@@ -9,10 +9,12 @@ import Foundation
 import WebKit
 import Photos
 
+
+
 /*
- * This class handles Photos related functionlities.
- * takePhoto method takes photo from camera, converts the photo to base64 & passes the result back to javascript.
- * selectFromPhotos method selects photo from gallery/External Storage, converts the photo to base64 & passes the result back to javascript.
+ * PhotosHandler class handles the Photos related functionalities.
+ * takePhoto function is used to take photo from camera.
+ * selectFromPhotos method is used to selects photo from gallery/External Storage, converts the photo to base64 & passes the result back to javascript.
 */
 
 class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -23,21 +25,18 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
     var accessStatus:Bool?
     var counter : Int = 0
 
+   
     /*
-            
-     * Bridgeview configuration with view and View controller.
-             
+    * This method intiliazes the PhotosHandler class with paramemters bridgeView & viewController.
     */
     init(bridgeView: BridgeView, viewController: UIViewController) {
         self.bridgeView = bridgeView
         self.viewController = viewController
     }
-    /*
-     
-      * PhotosHandler  class has been implemented here to perform their actions.
-
-     */
     
+    /*
+     *This method interacts with javascript & returns the method name called by javascript postmessage method.
+    */
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -49,7 +48,7 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
     }
     
     /*
-    *  This method takes photo from camera, converts the photo to base64 & passes the result back to javascript.
+    * takePhoto function is used to take photo from camera..
     */
     
     func takePhoto() {
@@ -104,18 +103,18 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
          })
       }
     
+ 
+    
     /*
-        
-    * Here we are checking threeshold count and show the alertview to Navigate the settings page.
+     *This method checks for permission required to read the photos
     */
-       
       
       func showSettingsAlerts(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
-          let alert = UIAlertController(title: nil, message: "This app requires access to Gallery or Camera to proceed. Go to Settings to grant access.", preferredStyle: .alert)
+        let alert = UIAlertController(title: nil, message: Constants.cameraOrGallerymsg, preferredStyle: .alert)
           if
               let settings = URL(string: UIApplication.openSettingsURLString),
               UIApplication.shared.canOpenURL(settings) {
-                  alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
+            alert.addAction(UIAlertAction(title: Constants.settingsStr, style: .default) { action in
                       completionHandler(false)
                       UIApplication.shared.open(settings)
                   })
@@ -135,7 +134,7 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
            viewController?.present(imageController, animated: true, completion: nil)
           }
           else {
-              self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \("You don't have permission to access gallery.")'})")
+            self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \(Constants.accessDeniedGallery)'})")
           }
       }
       
@@ -149,11 +148,14 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
           }
           else {
           viewController?.dismiss(animated: true, completion: nil)
-          self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \("Simulator not support to open Camera")'})")
+            self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \(Constants.Simulatornotsupportcamera)'})")
           }
       }
     
     // Delegate Methods
+       /*
+       * This method used to get selected imageview .
+       */
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -178,6 +180,10 @@ class PhotosHandler: NSObject, WKScriptMessageHandler, UIImagePickerControllerDe
             self.bridgeView.evaluate(JS: "callbackPhoto({photo :' \(photobase64)'})")
         }
     }
+    
+    /*
+    * This method cancels the user interaction.
+    */
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
       

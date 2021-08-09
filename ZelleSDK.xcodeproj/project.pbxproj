@@ -34,7 +34,20 @@
 		69AE5EE526B18264008AB09E /* CachedContactsHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */; };
 		69AE5EE726B2CD16008AB09E /* ContactsHandler1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */; };
 		69AF473326B7D486003D6CE5 /* ContactsHandler2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */; };
+		69C2252D26C1486F00EA0F47 /* ContactTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C2252C26C1486F00EA0F47 /* ContactTestCase.swift */; };
+		69C2253526C16E1C00EA0F47 /* ZelleSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C2253426C16E1C00EA0F47 /* ZelleSDKTests.swift */; };
+		69C2253726C16E1C00EA0F47 /* ZelleSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 695F34BE2689BC45004A8C47 /* ZelleSDK.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		69C2253826C16E1C00EA0F47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 695F34B52689BC45004A8C47 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 695F34BD2689BC45004A8C47;
+			remoteInfo = ZelleSDK;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		692FE74426AAC80B00E5519D /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
@@ -65,6 +78,10 @@
 		69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedContactsHandlers.swift; sourceTree = "<group>"; };
 		69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler1.swift; sourceTree = "<group>"; };
 		69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsHandler2.swift; sourceTree = "<group>"; };
+		69C2252C26C1486F00EA0F47 /* ContactTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTestCase.swift; sourceTree = "<group>"; };
+		69C2253226C16E1C00EA0F47 /* ZelleSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZelleSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		69C2253426C16E1C00EA0F47 /* ZelleSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZelleSDKTests.swift; sourceTree = "<group>"; };
+		69C2253626C16E1C00EA0F47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +93,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		69C2252F26C16E1C00EA0F47 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C2253726C16E1C00EA0F47 /* ZelleSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -83,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				695F34C02689BC45004A8C47 /* ZelleSDK */,
+				69C2253326C16E1C00EA0F47 /* ZelleSDKTests */,
 				695F34BF2689BC45004A8C47 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				695F34BE2689BC45004A8C47 /* ZelleSDK.framework */,
+				69C2253226C16E1C00EA0F47 /* ZelleSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,6 +130,7 @@
 				695F34CD2689BCB7004A8C47 /* Handlers */,
 				695F34C12689BC46004A8C47 /* ZelleSDK.h */,
 				695F34C22689BC46004A8C47 /* Info.plist */,
+				69C2252C26C1486F00EA0F47 /* ContactTestCase.swift */,
 			);
 			path = ZelleSDK;
 			sourceTree = "<group>";
@@ -148,7 +176,6 @@
 			isa = PBXGroup;
 			children = (
 				695F34D52689BCE6004A8C47 /* ContactsHandler.swift */,
-				69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */,
 				695F34CF2689BCE6004A8C47 /* Handlers.swift */,
 				695F34D42689BCE6004A8C47 /* LocationHandler.swift */,
 				695F34D22689BCE6004A8C47 /* PermissionsHandler.swift */,
@@ -159,6 +186,7 @@
 				69974F7C2696E2F0003B0459 /* SessionHandler.swift */,
 				69AE5EE626B2CD16008AB09E /* ContactsHandler1.swift */,
 				69AF473226B7D486003D6CE5 /* ContactsHandler2.swift */,
+				69AE5EE426B18264008AB09E /* CachedContactsHandlers.swift */,
 			);
 			path = Handlers;
 			sourceTree = "<group>";
@@ -175,6 +203,15 @@
 				69AE5EE226B15B12008AB09E /* Constants.swift */,
 			);
 			path = util;
+			sourceTree = "<group>";
+		};
+		69C2253326C16E1C00EA0F47 /* ZelleSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				69C2253426C16E1C00EA0F47 /* ZelleSDKTests.swift */,
+				69C2253626C16E1C00EA0F47 /* Info.plist */,
+			);
+			path = ZelleSDKTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,18 +249,40 @@
 			productReference = 695F34BE2689BC45004A8C47 /* ZelleSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		69C2253126C16E1C00EA0F47 /* ZelleSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69C2253A26C16E1C00EA0F47 /* Build configuration list for PBXNativeTarget "ZelleSDKTests" */;
+			buildPhases = (
+				69C2252E26C16E1C00EA0F47 /* Sources */,
+				69C2252F26C16E1C00EA0F47 /* Frameworks */,
+				69C2253026C16E1C00EA0F47 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				69C2253926C16E1C00EA0F47 /* PBXTargetDependency */,
+			);
+			name = ZelleSDKTests;
+			productName = ZelleSDKTests;
+			productReference = 69C2253226C16E1C00EA0F47 /* ZelleSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		695F34B52689BC45004A8C47 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1110;
 				LastUpgradeCheck = 1110;
 				ORGANIZATIONNAME = Fiserv;
 				TargetAttributes = {
 					695F34BD2689BC45004A8C47 = {
 						CreatedOnToolsVersion = 11.1;
 						LastSwiftMigration = 1110;
+					};
+					69C2253126C16E1C00EA0F47 = {
+						CreatedOnToolsVersion = 11.1;
 					};
 				};
 			};
@@ -244,12 +303,20 @@
 			projectRoot = "";
 			targets = (
 				695F34BD2689BC45004A8C47 /* ZelleSDK */,
+				69C2253126C16E1C00EA0F47 /* ZelleSDKTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		695F34BC2689BC45004A8C47 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C2253026C16E1C00EA0F47 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -265,6 +332,7 @@
 			files = (
 				695F34D82689BCE6004A8C47 /* QRCodeHandler.swift in Sources */,
 				69AE5EE326B15B12008AB09E /* Constants.swift in Sources */,
+				69C2252D26C1486F00EA0F47 /* ContactTestCase.swift in Sources */,
 				69407C7E2693604A00F45CC7 /* Util.swift in Sources */,
 				695F34DA2689BCE6004A8C47 /* PermissionsHandler.swift in Sources */,
 				695F34E92689BD31004A8C47 /* Bridge.swift in Sources */,
@@ -291,7 +359,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		69C2252E26C16E1C00EA0F47 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C2253526C16E1C00EA0F47 /* ZelleSDKTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		69C2253926C16E1C00EA0F47 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 695F34BD2689BC45004A8C47 /* ZelleSDK */;
+			targetProxy = 69C2253826C16E1C00EA0F47 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		695F34C42689BC46004A8C47 /* Debug */ = {
@@ -433,6 +517,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiserv.dps.mobile.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -458,6 +543,41 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fiserv.dps.mobile.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		69C2253B26C16E1C00EA0F47 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = ZelleSDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.fiserv.dps.mobile.sdk.ZelleSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		69C2253C26C16E1C00EA0F47 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = ZelleSDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.fiserv.dps.mobile.sdk.ZelleSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -480,6 +600,15 @@
 			buildConfigurations = (
 				695F34C72689BC46004A8C47 /* Debug */,
 				695F34C82689BC46004A8C47 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69C2253A26C16E1C00EA0F47 /* Build configuration list for PBXNativeTarget "ZelleSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69C2253B26C16E1C00EA0F47 /* Debug */,
+				69C2253C26C16E1C00EA0F47 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

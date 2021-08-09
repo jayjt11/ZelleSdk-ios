@@ -8,7 +8,10 @@
 import UIKit
 
 internal class BridgeController: UIViewController {
-
+    
+/*
+ *Bridgeview controller takes the values  from bridgeconfig and forms the complete url and loads in the webview.
+ */
     /*
      
      

@@ -9,12 +9,12 @@ import WebKit
 import QRCodeReader
 import Photos
 
-// , QRCodeReaderViewControllerDelegate protocol
+//, QRCodeReaderViewControllerDelegate protocol
 
 /*
- * This class handles QR code related functionlities.
- * scanCode method scans the QR code from camera, reads it & passes the result back to javascript.
- * selectQRCodeFromPhotos method selects QR code from gallery/External Storage, reads it & passes the result back to javascript.
+ * QRCodeHandler class handles the contacts related functionalities.
+ * scanCode function is used to scans the QR code from camera, reads it & passes the result back to javascript.
+ * selectQRCodeFromPhotos function used to  selects QR code from gallery/External Storage, reads it & passes the result back to javascript
 */
 
 class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDelegate,UIImagePickerControllerDelegate, QRCodeReaderViewControllerDelegate  {
@@ -24,7 +24,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     var viewController: UIViewController?
     
     /*
-     * Bridgeview configuration with view and View controller.
+    * This method intiliazes the ContactsHandler class with paramemters bridgeView & viewController.
     */
     
     init(bridgeView: BridgeView, viewController: UIViewController?) {
@@ -33,7 +33,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
     }
     
     /*
-     * QRCodeHandler  class has been implemented here to perform their actions.
+     *This method interacts with javascript & returns the method name called by javascript postmessage method.
     */
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -85,7 +85,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                     let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
                 
                     if (qrCode.phone != nil) && (qrCode.email != nil) {
-                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidQRcode)'})")
                         
                     } else if qrCode.phone == nil {
                         
@@ -95,12 +95,12 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                                 self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Email: \(qrCode.email!) '})")
                             } else {
                                
-                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvaliEmail)'})")
                             }
                             
                         } else {
                             
-                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Name")'})")
+                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidName)'})")
                         }
                     }
                     else if qrCode.email == nil {
@@ -110,18 +110,20 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                             if qrCode.phone!.isValidPhoneNumber() {
                                 self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Phone: \(qrCode.phone!) '})")
                             } else {
-                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Phone")'})")
+                                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidPhone)'})")
                             }
                         } else {
-                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvaliEmail)'})")
                         }
                     }
                 }
                 else {
-                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidQRcode)'})")
                 }
     }
-    
+   /*
+    * This method cancels the qr reader.
+    */
     func readerDidCancel(_ reader: QRCodeReaderViewController) {
         reader.stopScanning()
         reader.dismiss(animated: true, completion: nil)
@@ -167,7 +169,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
          viewController?.present(imageController, animated: true, completion: nil)
         }
         else {
-        let alert  = UIAlertController(title: "Warning", message: "You don't have permission to access gallery.", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "", message: Constants.accessDeniedGallery, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         //viewController?.present(alert, animated: true, completion: nil)
         viewController?.dismiss(animated: true, completion: nil)
@@ -186,7 +188,9 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
         }
     }
 
-    
+    /*
+    * delegate method for after scan the qr Or selected qr image
+    */
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -207,7 +211,7 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
             let qrCode: QRCode = try! JSONDecoder().decode(QRCode.self, from: jsonData)
             
             if (qrCode.phone != nil) && (qrCode.email != nil) {
-                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+                self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidQRcode)'})")
                 
             } else if qrCode.phone == nil {
                 
@@ -215,10 +219,10 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                     if qrCode.email!.isValidEmail() {
                         self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Email: \(qrCode.email!) '})")
                     } else {
-                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidName)'})")
                     }
                 } else {
-                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Name")'})")
+                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidName)'})")
                 }
             }
             else if qrCode.email == nil {
@@ -228,30 +232,30 @@ class QRCodeHandler: NSObject, WKScriptMessageHandler, UINavigationControllerDel
                     if qrCode.phone!.isValidPhoneNumber() {
                         self.bridgeView.evaluate(JS: "callbackQRCode({code: 'Name : \(qrCode.name), Phone: \(qrCode.phone!) '})")
                     } else {
-                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Phone")'})")
+                        self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidPhone)'})")
                     }
                 } else {
-                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid Email")'})")
+                    self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvaliEmail)'})")
                 }
             }
         }
         else {
-            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\("Invalid QR code")'})")
+            self.bridgeView.evaluate(JS: "callbackQRCode({code: '\(Constants.InvalidQRcode)'})")
         }
     }
     
     /*
-     * Here we are checking threeshold count and show the alertview to Navigate the settings page.
+    *This method checks for permission required to read the scan qr
     */
     
     func showSettingsAlerts(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
         
-        var title = UserDefaults.standard.string(forKey: "title")
-         let alert = UIAlertController(title: title, message: "This app requires access to Gallery  to proceed. Go to Settings to grant access.", preferredStyle: .alert)
+        let title = UserDefaults.standard.string(forKey: "title")
+        let alert = UIAlertController(title: title, message:Constants.contactMsg, preferredStyle: .alert)
          if
              let settings = URL(string: UIApplication.openSettingsURLString),
              UIApplication.shared.canOpenURL(settings) {
-                 alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
+            alert.addAction(UIAlertAction(title: Constants.settingsStr, style: .default) { action in
                      completionHandler(false)
                      UIApplication.shared.open(settings)
                  })

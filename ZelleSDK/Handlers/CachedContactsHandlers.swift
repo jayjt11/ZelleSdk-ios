@@ -6,11 +6,7 @@
 //  Copyright © 2021 Fiserv. All rights reserved.
 //
 
-//
-//  Fiserv
-//
-//  Created by omar.ata on 4/9/21.
-//
+
 import UIKit
 import WebKit
 import Contacts

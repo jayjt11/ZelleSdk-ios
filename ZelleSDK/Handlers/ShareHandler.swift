@@ -7,18 +7,21 @@
 import Foundation
 import WebKit
 
+
+
 /*
- * This class handles share content related functionlities.
- * sharePhoto method takes the values from javascript as base64, converts this to bitmap & displays the popup to the user to the share the photo.
- * shareText method takes the values from javascript as string, displays the popup to the user to the share the text.
+ * ShareHandler class handles the share related functionalities.
+ * sharePhoto function is used to takes the values from javascript as base64, converts this to bitmap & displays the popup to the user to the share the photo.
+ * shareText method takes the values from javascript as string, displays the popup to the user to the share the tex.
 */
 
 class ShareHandler: NSObject, WKScriptMessageHandler {
     var bridgeView: BridgeView
     var viewController: UIViewController?
     
+  
     /*
-     * Bridgeview configuration with view and View controller.
+    * This method intiliazes the ShareHandler class with paramemters bridgeView & viewController.
     */
 
     init(bridgeView: BridgeView, viewController: UIViewController?) {
@@ -26,8 +29,9 @@ class ShareHandler: NSObject, WKScriptMessageHandler {
         self.viewController = viewController
     }
 
-    /*
-     *Share handler class has been implemented here to perform their actions.
+   
+   /*
+    *This method interacts with javascript & returns the method name called by javascript postmessage method.
     */
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         switch message.name {
@@ -39,7 +43,7 @@ class ShareHandler: NSObject, WKScriptMessageHandler {
     }
     
     /*
-     * This method takes the values from javascript as base64, converts this to bitmap & displays the popup to the user to the share.
+     * sharePhoto function is used to takes the values from javascript as base64, converts this to bitmap & displays the popup to the user to the share the photo.
     */
     
     func sharePhoto(base64: NSString) {
@@ -51,14 +55,15 @@ class ShareHandler: NSObject, WKScriptMessageHandler {
         activityViewController.popoverPresentationController?.sourceView = bridgeView
         viewController?.present(activityViewController, animated: true, completion: nil)
     }
-
+    
     /*
-    * This method takes the values from javascript as string, displays the popup to the user to the share the text.
-    */
+     * shareText method takes the values from javascript as string, displays the popup to the user to the share the tex.
+     */
 
     func shareText() {
         
-        let text = "Welcome to ZelleSDK"
+        let text = Constants.testStr
+        
         let textShare = [ text ]
         let activityViewController = UIActivityViewController(activityItems: textShare , applicationActivities: nil)
              activityViewController.popoverPresentationController?.sourceView = bridgeView

@@ -213,9 +213,7 @@ class ContactsHandler1: NSObject, WKScriptMessageHandler, CNContactPickerDelegat
     }
     
     /*
-     
     * getOneContact() function is used to get the contact and send data to Javascript.
-    
     */
     
     func getOneContact() {
